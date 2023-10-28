@@ -12,5 +12,9 @@
   "devDependencies": {
     "@types/node": "^20.8.9",
     "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "@notionhq/client": "^0.4.9",
+    "dotenv": "^16.3.1"
   }
 }
