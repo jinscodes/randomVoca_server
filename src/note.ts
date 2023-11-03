@@ -7,7 +7,7 @@ interface Props {
   notionDatabaseId: string;
 }
 
-export const note = async ({ req, notion, notionDatabaseId }: Props) => {
+export const note = async ({ notion, notionDatabaseId }: Props) => {
   const query = await notion.databases.query({
     database_id: notionDatabaseId,
   });

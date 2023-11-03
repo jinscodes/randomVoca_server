@@ -1,16 +1,8 @@
 import { Client } from "@notionhq/client";
 import "dotenv/config";
 import http from "http";
+import { login } from "./login";
 import { note } from "./note";
-
-interface ThingToLearn {
-  title: string;
-  chapter: string;
-  words_en: string[];
-  words_ko: string[];
-  correct: number;
-  wrong: number;
-}
 
 const notionDatabaseLogin = process.env.NOTION_DATABASE_LOGIN;
 const notionDatabaseId = process.env.NOTION_DATABASE_ID;
@@ -40,21 +32,11 @@ const server = http.createServer(async (req, res) => {
       break;
 
     case "/login":
-      // console.log("/login url req: ", req.url);
-
-      const query2 = await notion.databases.query({
-        database_id: notionDatabaseLogin,
-      });
-
-      const list2 = query2.results.map((row) => {
-        const rowProp = row.properties;
-
-        console.log(rowProp);
-      });
+      const isLogin = await login({ req, notion, notionDatabaseLogin });
 
       res.setHeader("Content-Type", "application/json");
       res.writeHead(200);
-      res.end(JSON.stringify(list2));
+      res.end(JSON.stringify(isLogin));
       break;
 
     default:
