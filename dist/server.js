@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@notionhq/client");
 require("dotenv/config");
 const http_1 = __importDefault(require("http"));
+const login_1 = require("./login");
 const note_1 = require("./note");
 const notionDatabaseLogin = process.env.NOTION_DATABASE_LOGIN;
 const notionDatabaseId = process.env.NOTION_DATABASE_ID;
@@ -37,17 +38,10 @@ const server = http_1.default.createServer((req, res) => __awaiter(void 0, void 
             res.end(JSON.stringify(list));
             break;
         case "/login":
-            // console.log("/login url req: ", req.url);
-            const query2 = yield notion.databases.query({
-                database_id: notionDatabaseLogin,
-            });
-            const list2 = query2.results.map((row) => {
-                const rowProp = row.properties;
-                console.log(rowProp);
-            });
+            const isLogin = yield (0, login_1.login)({ req, notion, notionDatabaseLogin });
             res.setHeader("Content-Type", "application/json");
             res.writeHead(200);
-            res.end(JSON.stringify(list2));
+            res.end(JSON.stringify(isLogin));
             break;
         default:
             res.setHeader("Content-Type", "application/json");
