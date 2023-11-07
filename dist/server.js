@@ -38,10 +38,11 @@ const server = http_1.default.createServer((req, res) => __awaiter(void 0, void 
             res.end(JSON.stringify(list));
             break;
         case "/login":
-            const isLogin = yield (0, login_1.login)({ req, notion, notionDatabaseLogin });
+            const datas = yield (0, login_1.login)({ res, req, notion, notionDatabaseLogin });
+            console.log("isLogin: ", datas);
             res.setHeader("Content-Type", "application/json");
             res.writeHead(200);
-            res.end(JSON.stringify(isLogin));
+            res.end(JSON.stringify(datas));
             break;
         default:
             res.setHeader("Content-Type", "application/json");

@@ -32,11 +32,13 @@ const server = http.createServer(async (req, res) => {
       break;
 
     case "/login":
-      const isLogin = await login({ req, notion, notionDatabaseLogin });
+      const datas = await login({ res, req, notion, notionDatabaseLogin });
+
+      console.log("isLogin: ", datas);
 
       res.setHeader("Content-Type", "application/json");
       res.writeHead(200);
-      res.end(JSON.stringify(isLogin));
+      res.end(JSON.stringify(datas));
       break;
 
     default:

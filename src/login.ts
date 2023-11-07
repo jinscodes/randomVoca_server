@@ -1,13 +1,19 @@
 import { Client } from "@notionhq/client";
-import { IncomingMessage } from "http";
+import { IncomingMessage, ServerResponse } from "http";
 
 interface Props {
+  res: ServerResponse<IncomingMessage>;
   req: IncomingMessage;
   notion: Client;
   notionDatabaseLogin: string;
 }
 
-export const login = async ({ req, notion, notionDatabaseLogin }: Props) => {
+export const login = async ({
+  res,
+  req,
+  notion,
+  notionDatabaseLogin,
+}: Props) => {
   const query = await notion.databases.query({
     database_id: notionDatabaseLogin,
   });
@@ -28,28 +34,12 @@ export const login = async ({ req, notion, notionDatabaseLogin }: Props) => {
 
       return { id, pw };
     }
+
+    return {
+      id: "NOT_FOUND",
+      pw: "NOT_FOUND",
+    };
   });
 
-  if (req.method === "POST") {
-    // bring id & pw
-    let body = "";
-    req.on("data", (chunk) => {
-      body += chunk;
-    });
-
-    // id & pw from CLIENT
-    req.on("end", () => {
-      const bodyJson = JSON.parse(body);
-      // console.log("from DB: ", fromDB);
-      // console.log("to json: ", bodyJson);
-
-      const matchedId = fromDB.filter((data) => data?.id === bodyJson.id);
-      const matchedPw = matchedId.filter((data) => {
-        return data?.pw === bodyJson.pw;
-      });
-      console.log("matchedPw: ", matchedPw.length === 1 && true);
-
-      return bodyJson;
-    });
-  }
+  return fromDB;
 };
