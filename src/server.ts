@@ -1,6 +1,7 @@
 import { Client } from "@notionhq/client";
 import "dotenv/config";
 import http from "http";
+import { jwt } from "./jwt";
 import { login } from "./login";
 import { note } from "./note";
 
@@ -32,13 +33,35 @@ const server = http.createServer(async (req, res) => {
       break;
 
     case "/login":
-      const datas = await login({ res, req, notion, notionDatabaseLogin });
+      const isMatch = await login({ res, req, notion, notionDatabaseLogin });
 
-      console.log("isLogin: ", datas);
+      if (req.method === "POST") {
+        let body = "";
+        req.on("data", (chunk) => {
+          body += chunk;
+        });
 
-      res.setHeader("Content-Type", "application/json");
-      res.writeHead(200);
-      res.end(JSON.stringify(datas));
+        req.on("end", async () => {
+          const bodyJson = JSON.parse(body);
+          const matchedId = isMatch.filter((data) => data?.id === bodyJson.id);
+          const matchedPw = matchedId.filter((data) => {
+            return data?.pw === bodyJson.pw;
+          });
+
+          if (matchedPw.length === 1) {
+            const jwtToken = jwt({ header: bodyJson, payload: bodyJson });
+            const token = { token: jwtToken };
+
+            res.setHeader("Content-Type", "application/json");
+            res.writeHead(200);
+            res.end(JSON.stringify(token));
+          } else {
+            res.setHeader("Content-Type", "application/json");
+            res.writeHead(401);
+            res.end(JSON.stringify(isMatch));
+          }
+        });
+      }
       break;
 
     default:
