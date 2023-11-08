@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@notionhq/client");
 require("dotenv/config");
 const http_1 = __importDefault(require("http"));
+const jwt_1 = require("./jwt");
 const login_1 = require("./login");
 const note_1 = require("./note");
 const notionDatabaseLogin = process.env.NOTION_DATABASE_LOGIN;
@@ -38,11 +39,32 @@ const server = http_1.default.createServer((req, res) => __awaiter(void 0, void 
             res.end(JSON.stringify(list));
             break;
         case "/login":
-            const datas = yield (0, login_1.login)({ res, req, notion, notionDatabaseLogin });
-            console.log("isLogin: ", datas);
-            res.setHeader("Content-Type", "application/json");
-            res.writeHead(200);
-            res.end(JSON.stringify(datas));
+            const isMatch = yield (0, login_1.login)({ res, req, notion, notionDatabaseLogin });
+            if (req.method === "POST") {
+                let body = "";
+                req.on("data", (chunk) => {
+                    body += chunk;
+                });
+                req.on("end", () => __awaiter(void 0, void 0, void 0, function* () {
+                    const bodyJson = JSON.parse(body);
+                    const matchedId = isMatch.filter((data) => (data === null || data === void 0 ? void 0 : data.id) === bodyJson.id);
+                    const matchedPw = matchedId.filter((data) => {
+                        return (data === null || data === void 0 ? void 0 : data.pw) === bodyJson.pw;
+                    });
+                    if (matchedPw.length === 1) {
+                        const jwtToken = (0, jwt_1.jwt)({ header: bodyJson, payload: bodyJson });
+                        const token = { token: jwtToken };
+                        res.setHeader("Content-Type", "application/json");
+                        res.writeHead(200);
+                        res.end(JSON.stringify(token));
+                    }
+                    else {
+                        res.setHeader("Content-Type", "application/json");
+                        res.writeHead(401);
+                        res.end(JSON.stringify(isMatch));
+                    }
+                }));
+            }
             break;
         default:
             res.setHeader("Content-Type", "application/json");

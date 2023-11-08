@@ -34,11 +34,6 @@ export const login = async ({
 
       return { id, pw };
     }
-
-    return {
-      id: "NOT_FOUND",
-      pw: "NOT_FOUND",
-    };
   });
 
   return fromDB;
