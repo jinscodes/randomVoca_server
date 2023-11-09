@@ -53,7 +53,7 @@ const server = http_1.default.createServer((req, res) => __awaiter(void 0, void 
                     });
                     if (matchedPw.length === 1) {
                         const jwtToken = (0, jwt_1.jwt)({ header: bodyJson, payload: bodyJson });
-                        const token = { token: jwtToken };
+                        const token = { token: jwtToken, status: 200 };
                         res.setHeader("Content-Type", "application/json");
                         res.writeHead(200);
                         res.end(JSON.stringify(token));
@@ -61,7 +61,7 @@ const server = http_1.default.createServer((req, res) => __awaiter(void 0, void 
                     else {
                         res.setHeader("Content-Type", "application/json");
                         res.writeHead(401);
-                        res.end(JSON.stringify(isMatch));
+                        res.end(JSON.stringify({ status: 401 }));
                     }
                 }));
             }

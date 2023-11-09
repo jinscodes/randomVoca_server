@@ -50,7 +50,7 @@ const server = http.createServer(async (req, res) => {
 
           if (matchedPw.length === 1) {
             const jwtToken = jwt({ header: bodyJson, payload: bodyJson });
-            const token = { token: jwtToken };
+            const token = { token: jwtToken, status: 200 };
 
             res.setHeader("Content-Type", "application/json");
             res.writeHead(200);
@@ -58,7 +58,7 @@ const server = http.createServer(async (req, res) => {
           } else {
             res.setHeader("Content-Type", "application/json");
             res.writeHead(401);
-            res.end(JSON.stringify(isMatch));
+            res.end(JSON.stringify({ status: 401 }));
           }
         });
       }
