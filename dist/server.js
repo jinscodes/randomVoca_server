@@ -66,6 +66,18 @@ const server = http_1.default.createServer((req, res) => __awaiter(void 0, void 
                 }));
             }
             break;
+        case "/regist":
+            if (req.method === "POST") {
+                let body = "";
+                req.on("data", (chunk) => {
+                    body += chunk;
+                });
+                console.log(body);
+                req.on("end", () => __awaiter(void 0, void 0, void 0, function* () {
+                    const bodyJson = JSON.parse(body);
+                    console.log(bodyJson);
+                }));
+            }
         default:
             res.setHeader("Content-Type", "application/json");
             res.writeHead(404);
