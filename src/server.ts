@@ -64,6 +64,21 @@ const server = http.createServer(async (req, res) => {
       }
       break;
 
+    case "/regist":
+      if (req.method === "POST") {
+        let body = "";
+        req.on("data", (chunk) => {
+          body += chunk;
+        });
+
+        console.log(body);
+
+        req.on("end", async () => {
+          const bodyJson = JSON.parse(body);
+          console.log(bodyJson);
+        });
+      }
+
     default:
       res.setHeader("Content-Type", "application/json");
       res.writeHead(404);
