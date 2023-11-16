@@ -71,11 +71,70 @@ const server = http.createServer(async (req, res) => {
           body += chunk;
         });
 
-        console.log(body);
-
         req.on("end", async () => {
           const bodyJson = JSON.parse(body);
-          console.log(bodyJson);
+          console.log("76: ", bodyJson);
+
+          await notion.pages.create({
+            parent: {
+              database_id: notionDatabaseId,
+            },
+            properties: {
+              id: {
+                rich_text: [
+                  {
+                    text: {
+                      content: "id test2",
+                    },
+                  },
+                ],
+              },
+              title: {
+                rich_text: [
+                  {
+                    text: {
+                      content: "title test4",
+                    },
+                  },
+                ],
+              },
+              chapter: {
+                rich_text: [
+                  {
+                    text: {
+                      content: "chapter test3",
+                    },
+                  },
+                ],
+              },
+              words_en: {
+                multi_select: [
+                  {
+                    name: "en test5",
+                  },
+                  {
+                    name: "en test6",
+                  },
+                ],
+              },
+              words_ko: {
+                multi_select: [
+                  {
+                    name: "ko test7",
+                  },
+                  {
+                    name: "ko test8",
+                  },
+                ],
+              },
+              correct: {
+                number: 0,
+              },
+              wrong: {
+                number: 0,
+              },
+            },
+          });
         });
       }
 
