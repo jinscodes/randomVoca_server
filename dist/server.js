@@ -136,52 +136,6 @@ const server = http_1.default.createServer((req, res) => __awaiter(void 0, void 
                         },
                     });
                 }));
-                // const res = await notion.pages.create({
-                //   properties: {
-                //     id: {
-                //       rich_text: [
-                //         {
-                //           text: {
-                //             content: "jins99",
-                //           },
-                //         },
-                //       ],
-                //     },
-                //     title: {
-                //       rich_text: [
-                //         {
-                //           text: {
-                //             content: "title test",
-                //           },
-                //         },
-                //       ],
-                //     },
-                //     chapter: {
-                //       rich_text: [
-                //         {
-                //           text: {
-                //             content: "chapter test",
-                //           },
-                //         },
-                //       ],
-                //     },
-                //     words_en: {
-                //       multi_select: [{ name: "words_en test" }],
-                //     },
-                //     words_ko: {
-                //       multi_select: [{ name: "words_ko test" }],
-                //     },
-                //     correct: {
-                //       number: 0,
-                //     },
-                //     wrong: {
-                //       number: 0,
-                //     },
-                //   },
-                //   parent: {
-                //     database_id: notionDatabaseId,
-                //   },
-                // });
             }
         default:
             res.setHeader("Content-Type", "application/json");
