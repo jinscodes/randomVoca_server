@@ -6,7 +6,7 @@ import { login } from "./login";
 import { note } from "./note";
 
 const notionDatabaseLogin = process.env.NOTION_DATABASE_LOGIN;
-const notionDatabaseId = process.env.NOTION_DATABASE_ID;
+export const notionDatabaseId = process.env.NOTION_DATABASE_ID;
 const notionSecret = process.env.NOTION_SECRET;
 
 if (!notionDatabaseId || !notionSecret || !notionDatabaseLogin) {
